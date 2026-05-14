@@ -1,0 +1,59 @@
+from pathlib import Path
+import cv2
+
+# ============================================================
+# ФУНКЦИЯ: загрузка изображения
+# ============================================================
+def load_image(image_path: str):
+    """
+    Загружает изображение по указанному пути.
+    """
+    image = cv2.imread(str(image_path))
+    if image is None:
+        raise FileNotFoundError(f"Не удалось найти или открыть файл: {image_path}")
+    return image
+
+# ============================================================
+# ФУНКЦИЯ: перевод изображения в полутоновый формат
+# ============================================================
+
+def convert_to_grayscale(image):
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    return gray_image
+
+# ============================================================
+# ОСНОВНАЯ ФУНКЦИЯ ПРОГРАММЫ
+# ============================================================
+
+def main():
+    # Директория, где лежит этот скрипт
+    base_dir = Path(__file__).resolve().parent
+    # Полный путь к изображению
+    image_path = base_dir / "images" / "variant-1.jpg"  
+
+    # Загружаем изображение
+    original_image = load_image(image_path)
+
+    # Переводим в полутоновый формат
+    gray_image = convert_to_grayscale(original_image)
+
+    # Показываем изображения
+    cv2.imshow("Original Image", original_image)
+    cv2.imshow("Grayscale Image", gray_image)
+
+    # Сохраняем результат
+    output_path = base_dir / "images" / "variant-1-gray.jpg"
+    cv2.imwrite(str(output_path), gray_image)
+
+    print("Преобразование выполнено успешно.")
+    print(f"Полутоновое изображение сохранено как {output_path}")
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# ============================================================
+# ТОЧКА ВХОДА
+# ============================================================
+
+if __name__ == "__main__":
+    main()
